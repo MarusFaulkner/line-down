@@ -170,7 +170,7 @@ function renderTitle(){
 }
 
 /* ===================== Game ===================== */
-const W=960, H=540, FEET=506, MBASE=452, MH=150, MIKE_H=150, LANE=[46,914], SPEED=500;
+const W=960, H=540, FEET=506, MBASE=452, MH=170, MIKE_H=196, LANE=[46,914], SPEED=500;
 const cv=$("cv"), ctx=cv.getContext("2d");
 let SCALE=1, DPR=1, G=null, raf=0, last=0;
 
@@ -215,7 +215,7 @@ function cutin(name,side){ if(!ASSETS["cut_"+name]) return; const old=document.q
 function announce(a,b,info){ const d=document.createElement("div"); d.className="banner-new"+(info?" info":""); d.innerHTML=`${a}<small>${b}</small>`; $("stage").appendChild(d); setTimeout(()=>d.remove(),2700); }
 
 /* --- input --- */
-const workX=i=>G.mach[i].x-58;
+const workX=i=>G.mach[i].x-66;
 function goTo(x){ if(!G||G.state!=="run"||G.paused||G.slipT>=0) return; G.tx=Math.max(LANE[0],Math.min(LANE[1],x)); G.at=-1; G.target=undefined; renderPanel(); }
 function goMachine(i){ if(!G||G.state!=="run"||G.paused) return; if(G.slipT>=0){ G.queued=i; return; } G.tx=workX(i); G.target=i; G.at=-1; renderPanel(); }
 function doJump(){ if(!G||G.state!=="run"||G.paused||G.slipT>=0) return; if(G.jumpT<0){ G.jumpT=0; tone(SFX.jump); } }
@@ -399,7 +399,7 @@ function step(dt){
   G.oils.forEach(o=>o.t+=dt);
   const air=G.jumpT>=0 && G.jumpT>.12 && G.jumpT<.9;
   for(const o of G.oils){ if(o.t<.4||o.hit) continue;
-    if(Math.abs(o.x-G.mx)<34 && !air && G.slipT<0 && G.inv<=0 && (G.moving||G.jumpT>=0)){ o.hit=true; G.slipT=0; G.slips++; G.score-=20; G.inv=1.8; G.jumpT=-1; G.tx=G.mx; G.at=-1; G.target=undefined;
+    if(Math.abs(o.x-G.mx)<40 && !air && G.slipT<0 && G.inv<=0 && (G.moving||G.jumpT>=0)){ o.hit=true; G.slipT=0; G.slips++; G.score-=20; G.inv=1.8; G.jumpT=-1; G.tx=G.mx; G.at=-1; G.target=undefined;
       tone(SFX.slip); fx(G.mx,FEET-170,"−20","Slipped","#ff6060"); say("frustrated","Oil on the floor! Jump the spills.",1600); renderPanel(); renderHUD(); } }
   G.oils=G.oils.filter(o=>!o.hit&&o.t<o.life);
   if(G.oils.length===0 && G.t>12 && !G.oilHint){ G.oilHint=true; }
@@ -408,7 +408,7 @@ function step(dt){
   if(G.fork){ const f=G.fork;
     if(f.warn>0){ f.warn-=dt; if(f.warn<=.7&&!f.honked){ f.honked=true; tone(SFX.honk,.06); } }
     else { f.x+=f.v*dt;
-      if(Math.abs(f.x-G.mx)<78 && G.moving && G.slipT<0 && G.inv<=0){ G.slipT=0; G.bumps++; G.score-=40; G.inv=2; G.jumpT=-1; G.tx=G.mx; G.at=-1; G.target=undefined;
+      if(Math.abs(f.x-G.mx)<92 && G.moving && G.slipT<0 && G.inv<=0){ G.slipT=0; G.bumps++; G.score-=40; G.inv=2; G.jumpT=-1; G.tx=G.mx; G.at=-1; G.target=undefined;
         tone(SFX.bump); fx(G.mx,FEET-170,"−40","Forklift!","#ff6060"); say("frustrated","Forklift traffic has the right of way. Stop and let it pass.",2200); renderPanel(); renderHUD(); }
       if(f.x<-220||f.x>W+220) G.fork=null; } }
   // --- announcements
@@ -446,7 +446,7 @@ function draw(){
   // machines
   g.mach.forEach((m,i)=>drawMachine(m,i,g));
   // oil spills
-  g.oils.forEach(o=>{ const a=Math.min(1,o.t/.4,(o.life-o.t)/.6); ctx.globalAlpha=Math.max(0,a); img("oil",o.x,FEET+14,34); ctx.globalAlpha=1;
+  g.oils.forEach(o=>{ const a=Math.min(1,o.t/.4,(o.life-o.t)/.6); ctx.globalAlpha=Math.max(0,a); img("oil",o.x,FEET+14,40); ctx.globalAlpha=1;
     if(o.t<1.2){ ctx.fillStyle=`rgba(255,204,31,${.6*(1-o.t/1.2)})`; ctx.font="700 13px 'Barlow Condensed',sans-serif"; ctx.textAlign="center"; ctx.fillText("OIL SPILL",o.x,FEET-24); } });
   // target marker
   if(G&&G.state==="run"&&Math.abs(g.tx-g.mx)>4){ ctx.strokeStyle="rgba(255,204,31,.8)"; ctx.lineWidth=3; ctx.beginPath(); ctx.ellipse(g.tx,FEET+4,22,6,0,0,Math.PI*2); ctx.stroke(); }
@@ -499,12 +499,12 @@ function drawPlate(m){
 }
 function drawMike(g){
   let k, h=MIKE_H, y=FEET, x=g.mx, flip=g.dir<0;
-  if(g.slipT>=0){ k="slip"; h=128; }
-  else if(g.jumpT>=0){ k="jump"; h=140; y-=4*96*g.jumpT*(1-g.jumpT); }
-  else if(g.at>=0 && g.mach[g.at].fault && g.mach[g.at].locked){ k="repair"; h=126; flip=false; x=g.mach[g.at].x-30; y=FEET-4; }
+  if(g.slipT>=0){ k="slip"; h=166; }
+  else if(g.jumpT>=0){ k="jump"; h=184; y-=4*96*g.jumpT*(1-g.jumpT); }
+  else if(g.at>=0 && g.mach[g.at].fault && g.mach[g.at].locked){ k="repair"; h=162; flip=false; x=g.mach[g.at].x-38; y=FEET-4; }
   else if(g.moving){ k=(Math.floor(g.runPhase*4)%2)?"run2":"run1"; y-=Math.abs(Math.sin(g.runPhase*Math.PI*4))*3; }
-  else { k=IMG.idle&&IMG.idle.width?"idle":"run1"; if(k==="idle"){ h=186*(1+.012*Math.sin(g.t*2.6)); } }   // idle: slow breathing
-  const lift=FEET-y; ctx.fillStyle=`rgba(0,0,0,${.4-lift/400})`; ctx.beginPath(); ctx.ellipse(g.mx,FEET+2,Math.max(18,40-lift/5),7,0,0,Math.PI*2); ctx.fill();
+  else { k=IMG.idle&&IMG.idle.width?"idle":"run1"; if(k==="idle"){ h=242*(1+.012*Math.sin(g.t*2.6)); flip=false; } }   // idle: slow breathing; never mirrored, so the MIKE patch stays readable
+  const lift=FEET-y; ctx.fillStyle=`rgba(0,0,0,${.4-lift/400})`; ctx.beginPath(); ctx.ellipse(g.mx,FEET+2,Math.max(22,50-lift/5),8,0,0,Math.PI*2); ctx.fill();
   if(g.inv>0 && g.slipT<0 && Math.floor(g.inv*12)%2===0) ctx.globalAlpha=.45;
   img(k,x,y,h,flip); ctx.globalAlpha=1;
 }
@@ -518,7 +518,7 @@ function drawFork(g){
     ctx.fillStyle="#ff8a1f"; ctx.font="20px 'Lilita One',Impact,sans-serif"; ctx.textAlign=left?"left":"right"; ctx.strokeStyle="rgba(0,0,0,.8)"; ctx.lineWidth=4;
     ctx.strokeText("FORKLIFT!",left?16:W-16,FEET-104); ctx.fillText("FORKLIFT!",left?16:W-16,FEET-104); return; }
   ctx.fillStyle="rgba(0,0,0,.4)"; ctx.beginPath(); ctx.ellipse(f.x,FEET+20,78,9,0,0,Math.PI*2); ctx.fill();
-  img("forklift",f.x,FEET+24,128,f.v>0);    // sprite faces left; flip when driving right
+  img("forklift",f.x,FEET+24,160,f.v>0);    // sprite faces left; flip when driving right
 }
 
 /* --- end of shift --- */
