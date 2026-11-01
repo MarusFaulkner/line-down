@@ -2,6 +2,11 @@
 
 A 2½-minute maintenance arcade game starring **Mike Maintenance**. Four machines, one technician. Catch failures on their yellow warning, lock out before you touch anything, pick the right tool for the symptom, and keep the line running.
 
+## 🎮 Play Line Down!
+
+**[▶ Play Line Down!](https://marusfaulkner.github.io/line-down/)**
+
+Play directly in your browser — no download required.
 Part of the **Quality Rush** series by Marcus Faulkner, alongside [Defect Runner](https://marusfaulkner.github.io/quality-rush/), [Quality Quest](https://marusfaulkner.github.io/quality-quest/) and [Quality Showdown](https://marusfaulkner.github.io/quality-showdown/).
 
 ## How to play
