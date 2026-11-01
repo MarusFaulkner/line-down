@@ -178,7 +178,9 @@ function resize(){
   const box=$("stagebox"), bw=box.clientWidth, bh=box.clientHeight; if(!bw) return;
   const portrait=matchMedia("(orientation:portrait) and (max-width:700px)").matches;
   SCALE=portrait?bw/W:Math.min(bw/W,bh/H); DPR=Math.min(window.devicePixelRatio||1,2.5);
-  const rp=$("rp"), home=portrait?box:$("stage"); if(rp.parentNode!==home) home.appendChild(rp);
+  // Phone upright: Jump bar and repair panel sit below the floor, outside the stage (so cut-ins stay on the floor)
+  const rp=$("rp"), jb=$("bJump"), home=portrait?box:$("stage");
+  if(jb.parentNode!==home) home.appendChild(jb); if(rp.parentNode!==home||rp.previousElementSibling!==jb) home.appendChild(rp);
   cv.style.width=Math.floor(W*SCALE)+"px"; cv.style.height=Math.floor(H*SCALE)+"px";
   cv.width=Math.round(W*SCALE*DPR); cv.height=Math.round(H*SCALE*DPR);
   draw();
