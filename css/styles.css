@@ -93,7 +93,7 @@ img{display:block;max-width:100%}
 .overlay.pause b{display:block;font-family:var(--f-game);font-size:40px;color:var(--gold)}
 .overlay.pause span{color:var(--muted);font-weight:600}
 @keyframes pop{from{transform:scale(.5);opacity:0}to{transform:none;opacity:1}}
-.banner-new{position:absolute;left:50%;top:40%;transform:translateX(-50%);pointer-events:none;background:linear-gradient(180deg,#c91f1f,#7a0909);border:2px solid #ff8a8a;
+.banner-new{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);pointer-events:none;background:linear-gradient(180deg,#c91f1f,#7a0909);border:2px solid #ff8a8a;
   border-radius:12px;padding:6px 14px;text-align:center;font-family:var(--f-game);font-size:clamp(15px,4.4vw,20px);color:#fff;white-space:nowrap;animation:bannerin 2.6s forwards;z-index:4}
 .banner-new.info{background:linear-gradient(180deg,#1d5aa0,#0d2f5a);border-color:#8fc6ff}
 .banner-new small{display:block;font-family:var(--f-label);font-weight:700;font-size:13px;letter-spacing:.8px;color:#ffe3e3}
